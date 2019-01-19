@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ToolDangKiHangLoat
+namespace CheckStatus
 {
     class Program
     {
@@ -14,24 +14,18 @@ namespace ToolDangKiHangLoat
             List<string> listAcc = File.ReadAllLines("00.txt").ToList();
             Parallel.ForEach(listAcc, new ParallelOptions()
             {
-                MaxDegreeOfParallelism = 100
+                MaxDegreeOfParallelism = 1
             }, (Mssv) =>
             {
-                using (StartRequest vnu = new StartRequest())
+                using (CheckStatusRequest vnu = new CheckStatusRequest())
                 {
                     vnu.User = Mssv;
                     vnu.Pass = Mssv;
-                    vnu.LoginType = 1;
-                    vnu.ListDataRowIndex = new List<string>()
-                    {
-                        "136", "141", "137"
-                    };
-
-                    vnu.Login();
+                    vnu.Begin();
                 }
 
             });
-            Console.WriteLine($"{DateTime.Now} Done");
+            Console.ReadKey();
         }
     }
 }

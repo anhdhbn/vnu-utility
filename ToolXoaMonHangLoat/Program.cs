@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ToolDangKiHangLoat
+namespace ToolXoaMonHangLoat
 {
     class Program
     {
@@ -17,17 +17,11 @@ namespace ToolDangKiHangLoat
                 MaxDegreeOfParallelism = 100
             }, (Mssv) =>
             {
-                using (StartRequest vnu = new StartRequest())
+                using (HuyMonHoc vnu = new HuyMonHoc())
                 {
                     vnu.User = Mssv;
                     vnu.Pass = Mssv;
-                    vnu.LoginType = 1;
-                    vnu.ListDataRowIndex = new List<string>()
-                    {
-                        "136", "141", "137"
-                    };
-
-                    vnu.Login();
+                    vnu.Begin();
                 }
 
             });

